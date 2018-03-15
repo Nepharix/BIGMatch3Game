@@ -1,12 +1,18 @@
 import java.util.Vector;
 
-public class FormatedString
+// The FormattedString class is created from a single string.
+// It can then be accessed to provide strings with the same
+// text, but different formatting, such as right justification.
+// An instance of this class can also be used to provide 
+// analytical data for the conversion between strings.
+// Created by Spencer Bouck
+public class FormattedString
 {
 	private String toFormat;
 	private Vector<String> words;
 	private Vector<String> lines;
 	
-	public FormatedString(String input)
+	public FormattedString(String input)
 	{
 		toFormat = input;
 		
