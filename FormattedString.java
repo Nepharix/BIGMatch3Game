@@ -6,6 +6,7 @@ import java.util.Vector;
 // An instance of this class can also be used to provide 
 // analytical data for the conversion between strings.
 // Created by Spencer Bouck
+
 public class FormattedString
 {
 	private String toFormat;
@@ -195,6 +196,13 @@ public class FormattedString
 		{
 			sum += lines.get(i).length();
 		}
-		return ((double) sum) / lineCount();
+		if(lineCount() == 0)
+		{
+			return 0.0;
+		}
+		else
+		{
+			return ((double) sum) / lineCount();
+		}
 	}
 }
