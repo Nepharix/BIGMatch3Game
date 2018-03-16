@@ -10,7 +10,7 @@ import java.io.BufferedWriter;
 
 // Sorry nothing is commented yet, ran out of time. 
 
-public class FileManipulate {
+public class FileManipulate extends TextPanel {
 	
 	private Path filePath;
 	private Boolean _leftJustified;
@@ -29,15 +29,17 @@ public class FileManipulate {
 		wordList = new ArrayList<String>();
 	}
 	
+	public void FilePath (String fileName) {
+		filePath = Paths.get(fileName);
+	}
+	
 	private void PopulateWordArray() throws IOException {
 		try (Scanner scanner =  new Scanner(filePath)){
 			while (scanner.hasNextLine()){
-		        Scanner lineParser = new Scanner(scanner.nextLine());
-		        lineParser.useDelimiter("\\s+");
-		        while(lineParser.hasNext()) {
-		        	wordList.add(lineParser.next());
-		        }
-		        lineParser.close();
+		        //Scanner lineParser = new Scanner(scanner.nextLine());
+		        //lineParser.useDelimiter("\");
+		        	wordList.add(scanner.nextLine());
+		        //lineParser.close();
 		     } 
 			scanner.close();
 		}
@@ -69,27 +71,35 @@ public class FileManipulate {
 		return lines;
 	}
 	
-	private void WriteFile(ArrayList<String> linesToWrite) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(this.filePath.toAbsolutePath().toString() + ".formatted", false));
-		for(int i = 0; i < linesToWrite.size(); i++) {
-			String lineToWrite = linesToWrite.get(i);
-			if (!this._leftJustified) {
-				lineToWrite = String.format("%80s", lineToWrite);
-			}
-			writer.write(lineToWrite + "\n");
-		}
-		writer.close();
+	public void WriteFile(String linesToWrite, String filePath) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+			writer.write(linesToWrite);
+			writer.close();
 	}
+	
+	public String FileContents() {
+		if (wordList.isEmpty()) {
+			return "";
+		} else {
+			String Accumulate = wordList.get(0);
+			for(int i = 1; i < wordList.size(); i++) {
+				Accumulate = Accumulate + "\n" + wordList.get(i);
+			}
+			return Accumulate;
+		}
+	
+	}
+		
 	
 	public void FormatFile() throws IOException {
 		this.PopulateWordArray();
-		ArrayList<String> lines = this.LineFormatter();
-		this.WriteFile(lines);
+		
 	}
 	
+	
 	public static void main(String[] args) throws IOException {
-		FileManipulate fileFormatter = new FileManipulate(args[0], false); /* for now argument is direct path to text file 
-																			this can be changed under run configurations */
-		fileFormatter.FormatFile();	
+		FileManipulate fileFormatter = new FileManipulate(args[0], true); /* for now argument is direct path to text file	this can be changed under run configurations */
+		fileFormatter.FormatFile();
+		fileFormatter.WriteFile("Hello World", "C:\\Users\\D-Rock\\Desktop\\test.txt");
 	}
 }
