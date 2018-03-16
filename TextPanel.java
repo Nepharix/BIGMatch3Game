@@ -1,33 +1,26 @@
-package fileManage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.event.*;
-
 
 public class TextPanel extends JPanel{
 	 private JButton selectInput, swapJustification, createOutput, showAnalysis ;
-	 private JPanel buttons1, mainPanel, textPanel;
-	 private int width, height;
+	 private JPanel buttons1, mainPanel;
+	 private JTextArea textArea;
+	 private FileManipulate tester;
+	 private FormattedString formatter;
+	 private boolean leftJustify, doAnalysis;
 	 
 	 public TextPanel()
 	 {
-		 
-		 this.width = width;
-		 this.height = height;
 		 mainPanel = new JPanel();
 		 
 		 selectInput = new JButton("Select New Input");
-		 //selectInput.addActionListener(new ButtonListener());
          swapJustification = new JButton("Swap Justification");
-         //swapJustification.addActionListener(new ButtonListener());
          createOutput = new JButton("Create New Output");
-         //createOutput.addActionListener(new ButtonListener());
 		 showAnalysis = new JButton("Show Analysis");
-		 //showAnalysis.addActionListener(new ButtonListener());
 		 
 		 
 		 //listeners for the buttons
@@ -49,8 +42,7 @@ public class TextPanel extends JPanel{
          JPanel textPanel = new JPanel();
          
          
-         
-         JTextArea textArea = new JTextArea();
+         textArea = new JTextArea();
          textArea.setLineWrap(true);
          textArea.setWrapStyleWord(true);
          
@@ -63,6 +55,11 @@ public class TextPanel extends JPanel{
          mainPanel.add(buttons1, BorderLayout.WEST);
          mainPanel.add(textPanel, BorderLayout.EAST);
          add(mainPanel);
+
+         tester = null;
+         formatter = null;
+         leftJustify = true;
+         doAnalysis = false;
 	 }
 	
 	 private class ButtonListener implements ActionListener	{
@@ -74,28 +71,96 @@ public class TextPanel extends JPanel{
 			if(event.getSource() == selectInput)	{
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-					FileManipulate tester = new FileManipulate(file.getAbsolutePath());
+					tester = new FileManipulate(file.getAbsolutePath());
 					try {
 						tester.FormatFile();
 					} catch (IOException e) {
-						e.printStackTrace();
+						textArea.setText("Invalid file");
 					}
 				}
-				System.out.println("This is working");
+				
+				if(tester != null)
+				{
+					formatter = new FormattedString(tester.FileContents());
+				}
 				
 			}
-			if(event.getSource() == swapJustification)	{
-				
+			
+			//swaps the justification of the file
+			else if(event.getSource() == swapJustification)	{
+				leftJustify = !leftJustify;
+				if(leftJustify) {
+					textArea.setText("Current Justification: Left");
+				}
+				else {
+					textArea.setText("Current Justification: Right");
+				}
 			}
-			if(event.getSource() == createOutput)	{
+			
+			else if(event.getSource() == createOutput)	{
+				if(formatter != null)
+				{
+					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+						File file = fileChooser.getSelectedFile();
+						try {
+							if(leftJustify)
+							{
+								tester.WriteFile(formatter.leftJustify(), file.getAbsolutePath());
+								System.out.println(formatter.leftJustify());
+							}
+							else
+							{
+								tester.WriteFile(formatter.rightJustify(), file.getAbsolutePath());
+								System.out.println(formatter.rightJustify());
+							}
+								
+						} catch (IOException e) {
+							textArea.setText("Invalid file");
+						}
+					}
+				}
+				else
+				{
+					textArea.setText("Please select an input file first");
+				}
 				
+				//optional analysis output
+				if(formatter != null)
+				{
+					if(doAnalysis)
+					{
+						String toOutput = "";
+						toOutput = toOutput +"# words processed: " + formatter.wordCount();
+						toOutput = toOutput + "\n# lines: " + formatter.lineCount();
+						toOutput = toOutput + "\n# blank lines removed: " + formatter.linesRemoved();
+						toOutput = toOutput + "\nAverage words/line: " + formatter.wordsPerLine();
+						toOutput = toOutput + "\nAverage line length: " + formatter.lineLength();
+						textArea.setText(toOutput);
+					}
+					else
+					{
+						textArea.setText("File outputted successfully");
+					}
+				}
+				else
+				{
+					textArea.setText("Please select an input file first");
+				}
 			}
-			if(event.getSource() == showAnalysis){
-				
+			
+			//toggles showing analysis
+			else if(event.getSource() == showAnalysis){
+
+				doAnalysis = !doAnalysis;
+				if(doAnalysis) {
+					textArea.setText("Currently showing analysis");
+				}
+				else {
+					textArea.setText("Analysis disabled");
+				}
 			}
 		}
 	 }
-	 
-	 }
+}
 	 
 	 
