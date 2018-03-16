@@ -1,70 +1,31 @@
-import java.util.*;
+import java.util.*;	
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.awt.*;
 
 
-public class controlPanel1 extends jPanel{
+public class controlPanel1 extends JPanel{
 
-	 private JButton selectInput, swapJustification, createOutput, showAnalysis ;
-	 private JPanel buttons1;
+	
 	 private int width, height;
-	 private controlPanel1 cPanel;
+	 private int panelNum;
 	 
-	 
-	 public controlPanel1(int width, int height, Color color){
+	 public controlPanel1(int width, int height){
 		 this.width = width;
          this.height = height;
+         panelNum=2;
+         
+         TextPanel[] textpanels;
+         textpanels = new TextPanel[panelNum];
          
          
-         cPanel = new controlPanel1(height, height, color);
-         
-         
-         //create the buttons
-         selectInput = new JButton("Select New Input");
-         swapJustification = new JButton("Swap Justification");
-         createOutput = new JButton("Create New Output");
-		 showAnalysis = new JButton("Show Analysis");
-		 
-		 
-		 //listeners for the buttons
-		 selectInput.addActionListener(new ButtonListener());
-		 swapJustification.addActionListener(new ButtonListener());
-		 createOutput.addActionListener(new ButtonListener());
-		 showAnalysis.addActionListener(new ButtonListener());
-        
-		 
-		 buttons1 = new JPanel();
-         buttons1.setLayout(new GridLayout(4,1));
-         
-         buttons1.add(selectInput);
-         buttons1.add(swapJustification);
-         buttons1.add(createOutput);
-         buttons1.add(showAnalysis);
-         
-       
-         JPanel panel2 = new JPanel();
-         panel2.setLayout(new BorderLayout());
-         panel2.add(buttons1, BorderLayout.CENTER);
+         setLayout(new GridLayout(panelNum, 1));
+         for (int i=0; i< panelNum; i++)
+        	 add(textpanels[i]);
+         setPreferredSize(new Dimension(width, height));
         
          
          
 	 }
-	 
-	/* private class ButtonListener implements ActionListener
-	   {
-	       public void actionPerformed(ActionEvent event)
-	        {
-	    	  
-	            Object action = event.getSource();
-	            if(action == selectInput){
-	            	cPanel.selectInput();
-	            }
-	           if(action== start){
-	        	   tPanel.resume();
-	           }
-	            
-	        }	 
-}*/
 }
