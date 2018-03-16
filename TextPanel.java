@@ -6,9 +6,12 @@ import javax.swing.event.*;
 
 public class TextPanel extends JPanel{
 	 private JButton selectInput, swapJustification, createOutput, showAnalysis ;
-	 private JPanel buttons1, mainPanel, textPanel;
+	 private JPanel buttons1, mainPanel, textPanel, input;
 	 private int width, height;
 	 private controlPanel1 cPanel;
+	 private JTextField fileIn;
+	 private JTextArea textArea;
+	 private JLabel label1;
 	 
 	 public TextPanel()
 	 {
@@ -45,7 +48,6 @@ public class TextPanel extends JPanel{
          
          JPanel textPanel = new JPanel();
          
-         
          JTextArea textArea = new JTextArea();
          textArea.setLineWrap(true);
          textArea.setWrapStyleWord(true);
@@ -56,9 +58,19 @@ public class TextPanel extends JPanel{
          areaScrollPane.setPreferredSize(new Dimension(250,250));
          add(areaScrollPane);
          
+         JPanel input = new JPanel();
+         JLabel label1 = new JLabel("Please enter the name of your file");
+         JTextField fileIn = new JTextField();
+         input.add(label1);
+         input.add(fileIn);
+         add(input);
+         
+         mainPanel.add(input, BorderLayout.NORTH);
          mainPanel.add(buttons1, BorderLayout.WEST);
          mainPanel.add(textPanel, BorderLayout.EAST);
          add(mainPanel);
+         
+         
 	 }
 	
 	 private class ButtonListener implements ActionListener	{
