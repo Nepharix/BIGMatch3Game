@@ -46,7 +46,7 @@ public class TextPanel extends JPanel{
          buttons1.add(showAnalysis).setPreferredSize(new Dimension(200,60));
          
          
-         JPanel textPanel = new JPanel();
+         textPanel = new JPanel();
          
          JTextArea textArea = new JTextArea();
          textArea.setLineWrap(true);
@@ -58,14 +58,15 @@ public class TextPanel extends JPanel{
          areaScrollPane.setPreferredSize(new Dimension(250,250));
          add(areaScrollPane);
          
-         JPanel input = new JPanel();
-         JLabel label1 = new JLabel("Please enter the name of your file");
-         JTextField fileIn = new JTextField();
+         input = new JPanel();
+         input.setLayout(new GridLayout(2,1));
+         label1 = new JLabel("Please enter the name of your file");
+         fileIn = new JTextField();
          input.add(label1);
          input.add(fileIn);
          add(input);
          
-         mainPanel.add(input, BorderLayout.NORTH);
+         mainPanel.add(input, BorderLayout.EAST);
          mainPanel.add(buttons1, BorderLayout.WEST);
          mainPanel.add(textPanel, BorderLayout.EAST);
          add(mainPanel);
