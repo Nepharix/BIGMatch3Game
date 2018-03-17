@@ -11,6 +11,7 @@ public class TextPanel extends JPanel{
 	 private JTextArea textArea;
 	 private FileManipulate tester;
 	 private FormattedString formatter;
+	 private String filePath;
 	 private boolean leftJustify, doAnalysis;
 	 
 	 public TextPanel()
@@ -58,6 +59,7 @@ public class TextPanel extends JPanel{
 
          tester = null;
          formatter = null;
+		 filePath = null;
          leftJustify = true;
          doAnalysis = false;
 	 }
@@ -68,10 +70,12 @@ public class TextPanel extends JPanel{
 		
 		public void actionPerformed (ActionEvent event)	{
 			
+			//gets input file
 			if(event.getSource() == selectInput)	{
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-					tester = new FileManipulate(file.getAbsolutePath());
+					filePath = file.getAbsolutePath();
+					tester = new FileManipulate(filePath);
 					try {
 						tester.FormatFile();
 					} catch (IOException e) {
@@ -97,21 +101,34 @@ public class TextPanel extends JPanel{
 				}
 			}
 			
+			//outputs to new file
 			else if(event.getSource() == createOutput)	{
 				if(formatter != null)
 				{
 					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						File file = fileChooser.getSelectedFile();
 						try {
-							if(leftJustify)
-							{
-								tester.WriteFile(formatter.leftJustify(), file.getAbsolutePath());
-								System.out.println(formatter.leftJustify());
+							if(!filePath.equals(file.getAbsolutePath())) {
+								if(leftJustify)
+									tester.WriteFile(formatter.leftJustify(), file.getAbsolutePath());
+								else
+									tester.WriteFile(formatter.rightJustify(), file.getAbsolutePath());
+								//optional analysis output
+								if(doAnalysis) {
+									String toOutput = "";
+									toOutput = toOutput +"# words processed: " + formatter.wordCount();
+									toOutput = toOutput + "\n# lines: " + formatter.lineCount();
+									toOutput = toOutput + "\n# blank lines removed: " + formatter.linesRemoved();
+									toOutput = toOutput + "\nAverage words/line: " + formatter.wordsPerLine();
+									toOutput = toOutput + "\nAverage line length: " + formatter.lineLength();
+									textArea.setText(toOutput);
+								}
+								else {
+									textArea.setText("File outputted successfully");
+								}
 							}
-							else
-							{
-								tester.WriteFile(formatter.rightJustify(), file.getAbsolutePath());
-								System.out.println(formatter.rightJustify());
+							else {
+								textArea.setText("Please chose a file other than the input file to output to");
 							}
 								
 						} catch (IOException e) {
@@ -119,37 +136,13 @@ public class TextPanel extends JPanel{
 						}
 					}
 				}
-				else
-				{
-					textArea.setText("Please select an input file first");
-				}
-				
-				//optional analysis output
-				if(formatter != null)
-				{
-					if(doAnalysis)
-					{
-						String toOutput = "";
-						toOutput = toOutput +"# words processed: " + formatter.wordCount();
-						toOutput = toOutput + "\n# lines: " + formatter.lineCount();
-						toOutput = toOutput + "\n# blank lines removed: " + formatter.linesRemoved();
-						toOutput = toOutput + "\nAverage words/line: " + formatter.wordsPerLine();
-						toOutput = toOutput + "\nAverage line length: " + formatter.lineLength();
-						textArea.setText(toOutput);
-					}
-					else
-					{
-						textArea.setText("File outputted successfully");
-					}
-				}
-				else
-				{
+				else {
 					textArea.setText("Please select an input file first");
 				}
 			}
 			
 			//toggles showing analysis
-			else if(event.getSource() == showAnalysis){
+			else if(event.getSource() == showAnalysis) {
 
 				doAnalysis = !doAnalysis;
 				if(doAnalysis) {
@@ -162,5 +155,3 @@ public class TextPanel extends JPanel{
 		}
 	 }
 }
-	 
-	 
