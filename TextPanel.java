@@ -109,18 +109,40 @@ public class TextPanel extends JPanel{
 						File file = fileChooser.getSelectedFile();
 						try {
 							if(!filePath.equals(file.getAbsolutePath())) {
+								
+								/*
+								 * DELETE THIS:
+								 * PURELY TEST PURPOSES
+								 * */
+
+								formatter.setLineLength(40);
+								formatter.setSpacing(2);
+								
+								
+								/*
+								 * OK STOP DELETING
+								 * 
+								 * */
+								
+								
+								
 								if(leftJustify)
 									tester.WriteFile(formatter.leftJustify(), file.getAbsolutePath());
 								else
 									tester.WriteFile(formatter.rightJustify(), file.getAbsolutePath());
+								
+								//DELETE THIS LINE ALSO THO
+								tester.WriteFile(formatter.fullJustify(), file.getAbsolutePath());
+								
 								//optional analysis output
 								if(doAnalysis) {
 									String toOutput = "";
 									toOutput = toOutput +"# words processed: " + formatter.wordCount();
 									toOutput = toOutput + "\n# lines: " + formatter.lineCount();
 									toOutput = toOutput + "\n# blank lines removed: " + formatter.linesRemoved();
-									toOutput = toOutput + "\nAverage words/line: " + formatter.wordsPerLine();
-									toOutput = toOutput + "\nAverage line length: " + formatter.lineLength();
+									toOutput = toOutput + "\nAverage words/line: " + String.format("%.2f", formatter.wordsPerLine());
+									toOutput = toOutput + "\nAverage line length: " + String.format("%.2f", formatter.lineLength());
+									toOutput = toOutput + "\nSpaces added: " + formatter.spacesAdded();
 									textArea.setText(toOutput);
 								}
 								else {
@@ -155,3 +177,5 @@ public class TextPanel extends JPanel{
 		}
 	 }
 }
+	 
+	 

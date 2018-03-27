@@ -1,0 +1,74 @@
+****************************************
+Team Members:
+Spencer Bouck
+Nestor Casillas
+Taylor Coleman
+Derek Hornacek
+****************************************
+Test Case Description:
+This test case is run with
+the following specifications:
+Justification: Full
+Line Length: 40
+Spacing: Double
+****************************************
+Input File:
+****************************************
+This is a sample text file demonstrating that a_word_longer_than_the_line_limit_can_still_be_handled_correctly and 
+the next words in the file can still be formatted accordingly, despite
+the_word_longer_than_the_line_limit_taking_up_space_in_the_file. This is filler text. Notice
+
+	 different 			spacing styles 				do    not
+				  
+	 impact
+  how
+the words are read (although whitespace on an otherwise empty line 
+                  
+will cause that line to be considered non-empty in the analysis). 
+	Also notice how the last line contains text, 
+rather than containing an empty space or a newline.
+Also notice how single words in full justification are left justified.
+****************************************
+Expected Output File:
+****************************************
+This is a sample text file demonstrating
+
+that
+
+a_word_longer_than_the_line_limit_can_still_be_handled_correctly
+
+and the next words in the file can still
+
+be    formatted   accordingly,   despite
+
+the_word_longer_than_the_line_limit_taking_up_space_in_the_file.
+
+This  is  filler  text. Notice different
+
+spacing  styles  do  not  impact how the
+
+words  are  read (although whitespace on
+
+an  otherwise empty line will cause that
+
+line  to  be considered non-empty in the
+
+analysis). Also notice how the last line
+
+contains text, rather than containing an
+
+empty  space  or  a newline. Also notice
+
+how  single  words in full justification
+
+are            left           justified.
+****************************************
+Expected Analysis:
+****************************************
+# words processed: 85
+# lines: 31
+# blank lines removed: 1
+Average words/line: 2.74
+Average line length: 19.58
+Spaces added: 89
+****************************************
