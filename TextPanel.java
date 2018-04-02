@@ -6,38 +6,69 @@ import java.io.IOException;
 
 
 public class TextPanel extends JPanel{
-	 private JButton selectInput, swapJustification, createOutput, showAnalysis ;
+	 private JButton selectInput, createOutput;
 	 private JPanel buttons1, mainPanel;
+	 private JPanel justificationPanel, analysisPanel, lineLengthPanel, spacingPanel;
 	 private JTextArea textArea;
 	 private FileManipulate tester;
 	 private FormattedString formatter;
 	 private String filePath;
-	 private boolean leftJustify, doAnalysis;
+	 private boolean doAnalysis;
+	 private int lineLength, spacing;
 	 
 	 public TextPanel()
 	 {
 		 mainPanel = new JPanel();
 		 
 		 selectInput = new JButton("Select New Input");
-         swapJustification = new JButton("Swap Justification");
          createOutput = new JButton("Create New Output");
-		 showAnalysis = new JButton("Show Analysis");
 		 
 		 
 		 //listeners for the buttons
 		 selectInput.addActionListener(new ButtonListener());
-		 swapJustification.addActionListener(new ButtonListener());
 		 createOutput.addActionListener(new ButtonListener());
-		 showAnalysis.addActionListener(new ButtonListener());
         
+		 //panel to show justification options
+		 justificationPanel = new JPanel();
+		 justificationPanel.setLayout(new GridLayout(1, 4));
+		 justificationPanel.add(new JLabel("Justification"));
+		 justificationPanel.add(new JRadioButton("Left"));
+		 justificationPanel.add(new JRadioButton("Right"));
+		 justificationPanel.add(new JRadioButton("Full"));
+
+	        
+		 //panel to show analysis options
+		 analysisPanel = new JPanel();
+		 analysisPanel.setLayout(new GridLayout(1, 3));
+		 analysisPanel.add(new JLabel("Analysis"));
+		 analysisPanel.add(new JRadioButton("Hide"));
+		 analysisPanel.add(new JRadioButton("Show"));
+
+	        
+		 //panel to show line length options
+		 lineLengthPanel = new JPanel();
+		 lineLengthPanel.setLayout(new GridLayout(1, 2));
+		 lineLengthPanel.add(new JLabel("Line Length"));
+		 lineLengthPanel.add(new JTextArea("80"));
+
+
+		 //panel to show spacing options
+		 spacingPanel = new JPanel();
+		 spacingPanel.setLayout(new GridLayout(1, 3));
+		 spacingPanel.add(new JLabel("Spacing"));
+		 spacingPanel.add(new JRadioButton("Single"));
+		 spacingPanel.add(new JRadioButton("Double"));
+		 
 		 
 		 buttons1 = new JPanel();
-         buttons1.setLayout(new GridLayout(4,1));
-         
-         buttons1.add(selectInput).setPreferredSize(new Dimension(200,60));
-         buttons1.add(swapJustification).setPreferredSize(new Dimension(200,60));
-         buttons1.add(createOutput).setPreferredSize(new Dimension(200,60));
-         buttons1.add(showAnalysis).setPreferredSize(new Dimension(200,60));
+         buttons1.setLayout(new GridLayout(6, 1));
+         buttons1.add(selectInput);
+         buttons1.add(createOutput);
+         buttons1.add(analysisPanel);
+         buttons1.add(justificationPanel);
+         buttons1.add(spacingPanel);
+         buttons1.add(lineLengthPanel);
+         buttons1.setPreferredSize(new Dimension(300, 240));
          
          
          JPanel textPanel = new JPanel();
@@ -60,8 +91,9 @@ public class TextPanel extends JPanel{
          tester = null;
          formatter = null;
 		 filePath = null;
-         leftJustify = true;
-         doAnalysis = false;
+		 doAnalysis = true;
+		 lineLength = 80;
+		 spacing = 2;
 	 }
 	
 	 private class ButtonListener implements ActionListener	{
@@ -90,17 +122,6 @@ public class TextPanel extends JPanel{
 				
 			}
 			
-			//swaps the justification of the file
-			else if(event.getSource() == swapJustification)	{
-				leftJustify = !leftJustify;
-				if(leftJustify) {
-					textArea.setText("Current Justification: Left");
-				}
-				else {
-					textArea.setText("Current Justification: Right");
-				}
-			}
-			
 			//outputs to new file
 			else if(event.getSource() == createOutput)	{
 				if(formatter != null)
@@ -110,29 +131,15 @@ public class TextPanel extends JPanel{
 						try {
 							if(!filePath.equals(file.getAbsolutePath())) {
 								
-								/*
-								 * DELETE THIS:
-								 * PURELY TEST PURPOSES
-								 * */
-
-								formatter.setLineLength(40);
-								formatter.setSpacing(2);
+								formatter.setLineLength(lineLength);
+								formatter.setSpacing(spacing);
 								
-								
-								/*
-								 * OK STOP DELETING
-								 * 
-								 * */
-								
-								
-								
-								if(leftJustify)
+								//if(leftJustify)
 									tester.WriteFile(formatter.leftJustify(), file.getAbsolutePath());
-								else
+								//else if(rightJustify)
 									tester.WriteFile(formatter.rightJustify(), file.getAbsolutePath());
-								
-								//DELETE THIS LINE ALSO THO
-								tester.WriteFile(formatter.fullJustify(), file.getAbsolutePath());
+								//else
+									tester.WriteFile(formatter.fullJustify(), file.getAbsolutePath());
 								
 								//optional analysis output
 								if(doAnalysis) {
@@ -162,20 +169,6 @@ public class TextPanel extends JPanel{
 					textArea.setText("Please select an input file first");
 				}
 			}
-			
-			//toggles showing analysis
-			else if(event.getSource() == showAnalysis) {
-
-				doAnalysis = !doAnalysis;
-				if(doAnalysis) {
-					textArea.setText("Currently showing analysis");
-				}
-				else {
-					textArea.setText("Analysis disabled");
-				}
-			}
 		}
 	 }
 }
-	 
-	 
