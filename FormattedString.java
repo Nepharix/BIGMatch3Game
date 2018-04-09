@@ -12,9 +12,10 @@ public class FormattedString
 	private String toFormat;
 	private Vector<String> words;
 	private Vector<String> lines;
-	private int spacing;
-	private int lineLength;
-	private int spaceCount;
+	private int spacing; //user-defined spacing (ie single-spaced, double-spaced, etc)
+	private int lineLength; //user-defined length of line
+	private int spaceCount; //records the total number of spaces added in the last output string
+	private int totalLength; //records the net length of the last output string, discounting newlines
 	
 	public FormattedString(String input)
 	{
@@ -22,6 +23,7 @@ public class FormattedString
 		lineLength = 80;
 		spacing = 1;
 		spaceCount = 0;
+		totalLength = 0;
 		parseWords();
 	}
 
@@ -180,10 +182,12 @@ public class FormattedString
 				}
 				text += "\n" + lines.get(i);
 			}
+			totalLength = text.length() - (lineCount() - 1);
 			return text;
 		}
 		else
 		{
+			totalLength = 0;
 			return "";
 		}
 	}
@@ -204,10 +208,12 @@ public class FormattedString
 				}
 				text += "\n" + rightJustifyLine(lines.get(i));
 			}
+			totalLength = text.length() - (lineCount() - 1);
 			return text;
 		}
 		else
 		{
+			totalLength = 0;
 			return "";
 		}
 	}
@@ -228,10 +234,12 @@ public class FormattedString
 				}
 				text += "\n" + fullJustifyLine(lines.get(i));
 			}
+			totalLength = text.length() - (lineCount() - 1);
 			return text;
 		}
 		else
 		{
+			totalLength = 0;
 			return "";
 		}
 	}
@@ -295,19 +303,9 @@ public class FormattedString
 	//Returns the average length of line in the output string
 	public double lineLength()
 	{
-		int sum = 0;
-		for(int i = 0; i < lines.size(); ++i)
-		{
-			sum += lines.get(i).length();
-		}
-		if(lineCount() == 0)
-		{
-			return 0.0;
-		}
-		else
-		{
-			return ((double) sum) / lineCount();
-		}
+		if(lineCount() == 0) { return 0.0; }
+		
+		return ((double) totalLength) / lineCount();
 	}
 	
 	//Returns the number of spaces added to the output string
