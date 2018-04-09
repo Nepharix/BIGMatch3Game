@@ -165,7 +165,11 @@ public class TextPanel extends JPanel{
 					}
 				}
 				
-				if(tester != null)
+				if(tester == null)
+				{
+					formatter = null;
+				}
+				else
 				{
 					formatter = new FormattedString(tester.FileContents());
 				}
